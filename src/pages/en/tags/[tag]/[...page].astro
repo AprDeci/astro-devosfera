@@ -1,0 +1,25 @@
+---
+import { getCollection } from "astro:content";
+import type { GetStaticPathsOptions } from "astro";
+import TagPage from "@/views/tags/TagPage.astro";
+import getUniqueTags from "@/utils/getUniqueTags";
+import getPostsByTag from "@/utils/getPostsByTag";
+import { SITE } from "@/config";
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const posts = await getCollection("blog");
+  const tags = getUniqueTags(posts);
+
+  return tags.flatMap(({ tag, tagName }) => {
+    const tagPosts = getPostsByTag(posts, tag);
+
+    return paginate(tagPosts, {
+      params: { tag },
+      props: { tagName },
+      pageSize: SITE.postPerPage,
+    });
+  });
+}
+---
+
+<TagPage {...Astro.props} />

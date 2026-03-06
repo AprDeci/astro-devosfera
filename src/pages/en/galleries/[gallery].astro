@@ -1,0 +1,21 @@
+---
+import { getCollection } from "astro:content";
+import GalleryPage from "@/views/galleries/GalleryPage.astro";
+import { SITE } from "@/config";
+
+export async function getStaticPaths() {
+  if (!SITE.showGalleries) return [];
+
+  const galleries = await getCollection("galleries", ({ data }) => !data.draft);
+  return galleries.map(gallery => ({
+    params: {
+      gallery: gallery.id
+        .replace(/\/index\.(md|mdx)$/, "")
+        .replace(/\.(md|mdx)$/, ""),
+    },
+    props: { entry: gallery },
+  }));
+}
+---
+
+<GalleryPage {...Astro.props} />
