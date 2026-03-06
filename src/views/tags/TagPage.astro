@@ -8,8 +8,6 @@ import Pagination from "@/components/Pagination.astro";
 import { SITE } from "@/config";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 
-const params = Astro.params;
-const { tag } = params;
 const { page, tagName } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -20,12 +18,12 @@ const t = useTranslations(lang);
   <Header />
   <Main
     pageTitle={[`${t("tagDetail.title")}: `, `${tagName}`]}
-    titleTransition={tag}
+    titleTransition={tagName}
     pageDesc={t("tagDetail.description", { tag: tagName })}
   >
-    <h1 slot="title" transition:name={tag}>{`${t("tagDetail.title")}:${tag}`}</h1>
+    <h1 slot="title" transition:name={tagName}>{`${t("tagDetail.title")}:${tagName}`}</h1>
     <ul>
-      {page.data.map(data => <Card {...data} />)}
+      {page.data.map((data: (typeof page.data)[number]) => <Card {...data} />)}
     </ul>
   </Main>
 
