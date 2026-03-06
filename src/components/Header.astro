@@ -7,11 +7,7 @@ import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import Logo from "@/assets/logo/devosfera.svg";
 import LinkButton from "./LinkButton.astro";
 import { SITE } from "@/config";
-import {
-  getLangFromUrl,
-  toLocalizedPath,
-  useTranslations,
-} from "@/i18n/utils";
+import { getLangFromUrl, toLocalizedPath, useTranslations } from "@/i18n/utils";
 
 const { pathname } = Astro.url;
 const lang = getLangFromUrl(Astro.url);
@@ -85,28 +81,37 @@ const isActive = (path: string) => {
           <li>
             <a
               href={localizedPosts}
-              class:list={["nav-link", { "nav-active": isActive(localizedPosts) }]}
-              >{t("nav.posts")}</a
+              class:list={[
+                "nav-link",
+                { "nav-active": isActive(localizedPosts) },
+              ]}>{t("nav.posts")}</a
             >
           </li>
           <li>
             <a
               href={localizedTags}
-              class:list={["nav-link", { "nav-active": isActive(localizedTags) }]}
-              >{t("nav.tags")}</a
+              class:list={[
+                "nav-link",
+                { "nav-active": isActive(localizedTags) },
+              ]}>{t("nav.tags")}</a
             >
           </li>
           <li>
             <a
               href={localizedAbout}
-              class:list={["nav-link", { "nav-active": isActive(localizedAbout) }]}
-              >{t("nav.about")}</a
+              class:list={[
+                "nav-link",
+                { "nav-active": isActive(localizedAbout) },
+              ]}>{t("nav.about")}</a
             >
           </li>
           <li class="flex items-center">
             <a
               href={localizedSearch}
-              class:list={["nav-link", { "nav-active": isActive(localizedSearch) }]}
+              class:list={[
+                "nav-link",
+                { "nav-active": isActive(localizedSearch) },
+              ]}
               title={t("nav.openSearch")}>{t("nav.search")}</a
             >
           </li>
@@ -194,21 +199,30 @@ const isActive = (path: string) => {
           <nav class="mobile-nav-links">
             <a
               href={localizedPosts}
-              class:list={["mobile-nav-link", { active: isActive(localizedPosts) }]}
+              class:list={[
+                "mobile-nav-link",
+                { active: isActive(localizedPosts) },
+              ]}
               style="--i:0">
               <span class="mobile-nav-indicator"></span>
               <span>{t("nav.posts")}</span>
             </a>
             <a
               href={localizedTags}
-              class:list={["mobile-nav-link", { active: isActive(localizedTags) }]}
+              class:list={[
+                "mobile-nav-link",
+                { active: isActive(localizedTags) },
+              ]}
               style="--i:1">
               <span class="mobile-nav-indicator"></span>
               <span>{t("nav.tags")}</span>
             </a>
             <a
               href={localizedAbout}
-              class:list={["mobile-nav-link", { active: isActive(localizedAbout) }]}
+              class:list={[
+                "mobile-nav-link",
+                { active: isActive(localizedAbout) },
+              ]}
               style="--i:2">
               <span class="mobile-nav-indicator"></span>
               <span>{t("nav.about")}</span>
@@ -725,19 +739,29 @@ const isActive = (path: string) => {
 
     if (!header || !navWrap || !borderLine) return;
 
+    const ENTER_SCROLL_Y = 24;
+    const LEAVE_SCROLL_Y = 8;
+    let isScrolled = false;
+
+    const syncHeaderState = (nextScrolled: boolean) => {
+      if (nextScrolled === isScrolled) return;
+
+      isScrolled = nextScrolled;
+
+      header.classList.toggle("header-scrolled", isScrolled);
+      navWrap.classList.toggle("sm:py-3", isScrolled);
+      navWrap.classList.toggle("sm:py-5", !isScrolled);
+      borderLine.classList.toggle("opacity-100", isScrolled);
+      borderLine.classList.toggle("opacity-0", !isScrolled);
+    };
+
     const handleScroll = () => {
-      if (window.scrollY > 15) {
-        header.classList.add("header-scrolled");
-        navWrap.classList.remove("sm:py-5");
-        navWrap.classList.add("sm:py-3");
-        borderLine.classList.remove("opacity-0");
-        borderLine.classList.add("opacity-100");
-      } else {
-        header.classList.remove("header-scrolled");
-        navWrap.classList.add("sm:py-5");
-        navWrap.classList.remove("sm:py-3");
-        borderLine.classList.add("opacity-0");
-        borderLine.classList.remove("opacity-100");
+      const scrollY = window.scrollY;
+
+      if (!isScrolled && scrollY >= ENTER_SCROLL_Y) {
+        syncHeaderState(true);
+      } else if (isScrolled && scrollY <= LEAVE_SCROLL_Y) {
+        syncHeaderState(false);
       }
     };
 
