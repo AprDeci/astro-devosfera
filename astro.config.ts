@@ -23,6 +23,10 @@ export default defineConfig({
       filter: page => SITE.showArchives || !page.endsWith("/archives"),
     }),
   ],
+  i18n:{
+    locales: ["en", "zh"],
+    defaultLocale: "zh",
+  },
   markdown: {
     remarkPlugins: [remarkToc, [remarkCollapse, { test: "Table of contents" }]],
     shikiConfig: {
@@ -81,7 +85,14 @@ export default defineConfig({
         name: "Sriracha",
         cssVariable: "--font-sriracha",
         fallbacks: ["cursive"],
-        provider: fontProviders.google(),
+        provider: fontProviders.local(),
+        options: {
+          variants: [
+            {
+              src: ["./src/assets/fonts/Sriracha-Regular.ttf"],
+            },
+          ],
+        },
       },
       {
         name: "Cartograph CF",
