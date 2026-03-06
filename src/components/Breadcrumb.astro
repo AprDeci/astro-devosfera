@@ -1,18 +1,15 @@
 ---
-import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import {
+  getLangFromUrl,
+  stripLocaleFromPath,
+  toLocalizedPath,
+  useTranslations,
+} from "@/i18n/utils";
 
-// Remove current url path and remove trailing slash if exists
-const currentUrlPath = Astro.url.pathname.replace(/\/+$/, "");
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-// Get url array from path
-// eg: /tags/tailwindcss => ['tags', 'tailwindcss']
-const breadcrumbList = currentUrlPath.split("/").slice(1).filter(Boolean);
-
-if (breadcrumbList[0] === lang) {
-  breadcrumbList.shift();
-}
+const breadcrumbList = stripLocaleFromPath(Astro.url.pathname);
+const localizedHome = toLocalizedPath(lang, "/");
 
 // if breadcrumb is Home > Posts > 1 <etc>
 // replace Posts with Posts (page number)
@@ -43,7 +40,7 @@ if (breadcrumbList[0] === "tags" && !isNaN(Number(breadcrumbList[2]))) {
   <div class="breadcrumb-bar inline-flex items-center gap-1.5 rounded-full border border-border/20 bg-muted/5 px-3 py-1.5 font-cartograph text-sm backdrop-blur-sm">
     {/* Home icon / Root symbol */}
     <a
-      href="/"
+      href={localizedHome}
       class="breadcrumb-link inline-flex shrink-0 items-center justify-center rounded-md px-1.5 py-0.5 text-foreground/50 transition-colors duration-200 hover:bg-muted/10 hover:text-accent"
       aria-label={t("breadcrumb.home")}
       title={t("breadcrumb.home")}
@@ -71,10 +68,13 @@ if (breadcrumbList[0] === "tags" && !isNaN(Number(breadcrumbList[2]))) {
               {decodeURIComponent(breadcrumb)}
             </span>
           ) : (
-            <a
-              href={`/${breadcrumb}/`}
-              class="breadcrumb-link shrink-0 rounded-md px-1.5 py-0.5 capitalize text-foreground/50 transition-colors duration-200 hover:bg-muted/10 hover:text-accent"
-            >
+              <a
+               href={toLocalizedPath(
+                 lang,
+                 `/${breadcrumbList.slice(0, index + 1).join("/")}`
+               )}
+               class="breadcrumb-link shrink-0 rounded-md px-1.5 py-0.5 capitalize text-foreground/50 transition-colors duration-200 hover:bg-muted/10 hover:text-accent"
+             >
               {decodeURIComponent(breadcrumb)}
             </a>
           )}

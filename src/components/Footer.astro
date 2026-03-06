@@ -4,11 +4,12 @@ import { SOCIALS } from "@/constants";
 import LinkButton from "./LinkButton.astro";
 import { SITE } from "@/config";
 import Logo from "@/assets/logo/devosfera.svg";
-import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { getLangFromUrl, toLocalizedPath, useTranslations } from "@/i18n/utils";
 
 const currentYear = new Date().getFullYear();
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+const localizedHome = toLocalizedPath(lang, "/");
 
 type Props = {
   noMarginTop?: boolean;
@@ -35,7 +36,7 @@ const { noMarginTop = false, class: className, ...attrs } = Astro.props;
       <!-- Brand column -->
       <div class="flex flex-col items-center gap-3 sm:items-start">
         <a
-          href="/"
+          href={localizedHome}
           class="group relative flex items-center gap-2 text-lg font-bold tracking-tight"
         >
           <Logo class="w-28 opacity-80 transition-all duration-300 group-hover:opacity-100 group-hover:scale-105 group-hover:drop-shadow-[0_0_8px_rgba(var(--accent-rgb),0.5)] dark:invert" />

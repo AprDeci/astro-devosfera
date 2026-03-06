@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { slugifyStr } from "@/utils/slugify";
-import { getPath } from "@/utils/getPath";
+import { getLangFromUrl, getLocalizedPostPath } from "@/i18n/utils";
 import Datetime from "./Datetime.astro";
 
 type Props = {
@@ -12,6 +12,8 @@ type Props = {
 const { variant: Heading = "h2", featured = false, id, data, filePath } = Astro.props;
 
 const { title, description, ...props } = data;
+const lang = getLangFromUrl(Astro.url);
+const href = getLocalizedPostPath(lang, id, filePath);
 ---
 
 <li
@@ -40,7 +42,7 @@ const { title, description, ...props } = data;
 
   <div class="relative z-5">
     <a
-      href={getPath(id, filePath)}
+      href={href}
       class="text-lg font-semibold text-foreground transition-colors duration-200 group-hover/card:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
       style={{ viewTransitionName: slugifyStr(String(title).replaceAll(".", "-")) }}
     >

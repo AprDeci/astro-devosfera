@@ -4,10 +4,11 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import { SITE } from "@/config";
-import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { getLangFromUrl, toLocalizedPath, useTranslations } from "@/i18n/utils";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+const localizedHome = toLocalizedPath(lang, "/");
 ---
 
 <Layout title={`404 Not Found | ${SITE.title}`}>
@@ -22,7 +23,7 @@ const t = useTranslations(lang);
       <span aria-hidden="true">¯\_(ツ)_/¯</span>
       <p class="mt-4 text-2xl sm:text-3xl">{t("notFound.title")}</p>
       <LinkButton
-        href="/"
+        href={localizedHome}
         class="my-6 text-lg underline decoration-dashed underline-offset-8"
       >
         {t("notFound.backHome")}

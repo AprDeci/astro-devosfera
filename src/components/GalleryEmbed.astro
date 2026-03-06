@@ -14,7 +14,7 @@
 import type { ImageMetadata } from "astro";
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
-import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { getLangFromUrl, toLocalizedPath, useTranslations } from "@/i18n/utils";
 
 type Props = {
   slug: string;
@@ -26,6 +26,7 @@ type Props = {
 const { slug, limit = 6, showLink = true, cols = 3 } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+const galleryHref = toLocalizedPath(lang, `/galleries/${slug}`);
 
 // ── 1. Buscar la entrada de la colección por slug ────────────────────────────
 // Se obtienen TODAS (incluyendo drafts) para que el embed funcione en preview;
@@ -158,7 +159,7 @@ const gridClass = {
           <span class="ge-desc">{entry.data.description}</span>
         )}
         {showLink && (
-          <a href={`/galleries/${slug}`} class="ge-link">
+          <a href={galleryHref} class="ge-link">
             {t("galleryEmbed.viewFull")}
             <svg
               xmlns="http://www.w3.org/2000/svg"

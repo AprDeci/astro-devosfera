@@ -4,14 +4,19 @@ import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
-import { getPath } from "@/utils/getPath";
 import { slugifyStr } from "@/utils/slugify";
 import getPostsByGroupCondition from "@/utils/getPostsByGroupCondition";
 import { SITE } from "@/config";
-import { getLangFromUrl, useTranslations, type Language } from "@/i18n/utils";
+import {
+  getLangFromUrl,
+  getLocalizedPostPath,
+  toLocalizedPath,
+  useTranslations,
+  type Language,
+} from "@/i18n/utils";
 
 if (!SITE.showArchives) {
-  return Astro.redirect("/404");
+  return Astro.redirect(toLocalizedPath(getLangFromUrl(Astro.url), "/404"));
 }
 
 const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -98,7 +103,7 @@ const yearGroups = Object.entries(
                         const day = new Date(post.data.pubDatetime).getDate();
                         return (
                           <a
-                            href={getPath(post.id, post.filePath)}
+                            href={getLocalizedPostPath(lang, post.id, post.filePath)}
                             class="post-card group"
                             data-archive-card
                           >

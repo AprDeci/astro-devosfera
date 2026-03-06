@@ -4,7 +4,7 @@ import type { CollectionEntry } from "astro:content";
 import IconArrowLeft from "@/assets/icons/IconArrowLeft.svg";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import LinkButton from "./LinkButton.astro";
-import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { getLangFromUrl, toLocalizedPath, useTranslations } from "@/i18n/utils";
 
 type Props = {
   page: Page<CollectionEntry<"blog">>;
@@ -13,6 +13,8 @@ type Props = {
 const { page } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+const prevHref = page.url.prev ? toLocalizedPath(lang, page.url.prev) : undefined;
+const nextHref = page.url.next ? toLocalizedPath(lang, page.url.next) : undefined;
 ---
 
 {
@@ -23,11 +25,11 @@ const t = useTranslations(lang);
       aria-label={t("pagination.nav")}
     >
       <LinkButton
-        disabled={!page.url.prev}
-        href={page.url.prev as string}
+        disabled={!prevHref}
+        href={prevHref as string}
         class:list={[
           "pagination-btn select-none group/btn",
-          { "opacity-50 pointer-events-none": !page.url.prev }
+          { "opacity-50 pointer-events-none": !prevHref }
         ]}
         aria-label={t("pagination.prev")}
       >
@@ -43,11 +45,11 @@ const t = useTranslations(lang);
       </div>
 
       <LinkButton
-        disabled={!page.url.next}
-        href={page.url.next as string}
+        disabled={!nextHref}
+        href={nextHref as string}
         class:list={[
           "pagination-btn select-none group/btn",
-          { "opacity-50 pointer-events-none": !page.url.next }
+          { "opacity-50 pointer-events-none": !nextHref }
         ]}
         aria-label={t("pagination.next")}
       >

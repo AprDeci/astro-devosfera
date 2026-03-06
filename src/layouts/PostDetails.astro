@@ -9,10 +9,14 @@ import ShareLinks from "@/components/ShareLinks.astro";
 import BackButton from "@/components/BackButton.astro";
 import BackToTopButton from "@/components/BackToTopButton.astro";
 import GalleryEmbed from "@/components/GalleryEmbed.astro";
-import { getPath } from "@/utils/getPath";
 import { slugifyStr } from "@/utils/slugify";
 import { SITE } from "@/config";
-import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import {
+  getLangFromUrl,
+  getLocalizedPostPath,
+  toLocalizedPath,
+  useTranslations,
+} from "@/i18n/utils";
 
 type Props = {
   post: CollectionEntry<"blog">;
@@ -49,7 +53,7 @@ if (typeof initOgImage === "string") {
 
 // Use dynamic OG image if enabled and no remote|local ogImage
 if (!ogImageUrl && SITE.dynamicOgImage) {
-  ogImageUrl = `${getPath(post.id, post.filePath)}/index.png`;
+  ogImageUrl = `${getLocalizedPostPath(lang, post.id, post.filePath)}/index.png`;
 }
 
 // Resolve OG image URL (or fallback to SITE.ogImage / default `og.png`)
@@ -107,8 +111,8 @@ const nextPost =
         <div class="mt-4 flex flex-wrap justify-center gap-2">
           {
             tags.map((tag: string) => (
-              <a
-                href={`/tags/${slugifyStr(tag)}/`}
+                <a
+                href={toLocalizedPath(lang, `/tags/${slugifyStr(tag)}`)}
                 class="post-tag-badge inline-flex items-center gap-1 rounded-full border border-accent/20 bg-accent/5 px-2.5 py-0.5 font-cartograph text-xs text-accent transition-all duration-200 hover:border-accent/40 hover:bg-accent/10 hover:shadow-sm hover:shadow-accent/10"
               >
                 <span class="opacity-50">#</span>
@@ -215,7 +219,7 @@ const nextPost =
         {
           tags.map((tag: string) => (
             <a
-              href={`/tags/${slugifyStr(tag)}/`}
+              href={toLocalizedPath(lang, `/tags/${slugifyStr(tag)}`)}
               class="inline-flex items-center gap-1 rounded-full border border-border/25 bg-muted/10 px-2.5 py-1 font-cartograph text-xs transition-all duration-200 hover:border-accent/40 hover:bg-accent/5 hover:text-accent"
             >
               <span class="opacity-40">#</span>
@@ -242,7 +246,7 @@ const nextPost =
       {
         prevPost ? (
           <a
-            href={getPath(prevPost.id, prevPost.filePath)}
+            href={getLocalizedPostPath(lang, prevPost.id, prevPost.filePath)}
             class="post-nav-link group relative flex flex-col gap-1 rounded-2xl border border-border/20 px-5 py-4 transition-all duration-300 hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5"
           >
             <div class="post-nav-bg" />
@@ -274,7 +278,7 @@ const nextPost =
       {
         nextPost && (
           <a
-            href={getPath(nextPost.id, nextPost.filePath)}
+            href={getLocalizedPostPath(lang, nextPost.id, nextPost.filePath)}
             class="post-nav-link group relative col-start-2 flex flex-col items-end gap-1 rounded-2xl border border-border/20 px-5 py-4 text-end transition-all duration-300 hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5"
           >
             <div class="post-nav-bg" />

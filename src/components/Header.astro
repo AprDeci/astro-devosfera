@@ -7,7 +7,11 @@ import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import Logo from "@/assets/logo/devosfera.svg";
 import LinkButton from "./LinkButton.astro";
 import { SITE } from "@/config";
-import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import {
+  getLangFromUrl,
+  toLocalizedPath,
+  useTranslations,
+} from "@/i18n/utils";
 
 const { pathname } = Astro.url;
 const lang = getLangFromUrl(Astro.url);
@@ -17,11 +21,19 @@ const t = useTranslations(lang);
 const currentPath =
   pathname.endsWith("/") && pathname !== "/" ? pathname.slice(0, -1) : pathname;
 
+const localizedHome = toLocalizedPath(lang, "/");
+const localizedPosts = toLocalizedPath(lang, "/posts");
+const localizedTags = toLocalizedPath(lang, "/tags");
+const localizedAbout = toLocalizedPath(lang, "/about");
+const localizedSearch = toLocalizedPath(lang, "/search");
+const localizedArchives = toLocalizedPath(lang, "/archives");
+const localizedGalleries = toLocalizedPath(lang, "/galleries");
+
 const isActive = (path: string) => {
   const currentPathArray = currentPath.split("/").filter(p => p.trim());
   const pathArray = path.split("/").filter(p => p.trim());
 
-  return currentPath === path || currentPathArray[0] === pathArray[0];
+  return currentPath === path || currentPathArray.at(-1) === pathArray.at(-1);
 };
 ---
 
@@ -46,7 +58,7 @@ const isActive = (path: string) => {
       ]}>
       <!-- Logo -->
       <a
-        href="/"
+        href={localizedHome}
         class="group relative z-20 flex items-center gap-2 text-xl font-bold tracking-tight sm:text-2xl">
         <!-- <span class="nav-logo-text">{SITE.title}</span> -->
         <Logo class="w-37.5 dark:invert" />
@@ -72,29 +84,29 @@ const isActive = (path: string) => {
         <ul class="hidden sm:flex sm:flex-row sm:items-center sm:gap-1">
           <li>
             <a
-              href="/posts"
-              class:list={["nav-link", { "nav-active": isActive("/posts") }]}
+              href={localizedPosts}
+              class:list={["nav-link", { "nav-active": isActive(localizedPosts) }]}
               >{t("nav.posts")}</a
             >
           </li>
           <li>
             <a
-              href="/tags"
-              class:list={["nav-link", { "nav-active": isActive("/tags") }]}
+              href={localizedTags}
+              class:list={["nav-link", { "nav-active": isActive(localizedTags) }]}
               >{t("nav.tags")}</a
             >
           </li>
           <li>
             <a
-              href="/about"
-              class:list={["nav-link", { "nav-active": isActive("/about") }]}
+              href={localizedAbout}
+              class:list={["nav-link", { "nav-active": isActive(localizedAbout) }]}
               >{t("nav.about")}</a
             >
           </li>
           <li class="flex items-center">
             <a
-              href="/search"
-              class:list={["nav-link", { "nav-active": isActive("/search") }]}
+              href={localizedSearch}
+              class:list={["nav-link", { "nav-active": isActive(localizedSearch) }]}
               title={t("nav.openSearch")}>{t("nav.search")}</a
             >
           </li>
@@ -102,10 +114,10 @@ const isActive = (path: string) => {
             SITE.showArchives && (
               <li>
                 <LinkButton
-                  href="/archives"
+                  href={localizedArchives}
                   class:list={[
                     "nav-link",
-                    { "nav-active": isActive("/archives") },
+                    { "nav-active": isActive(localizedArchives) },
                   ]}
                   title={t("nav.archives")}
                   aria-label={t("nav.archives")}>
@@ -119,10 +131,10 @@ const isActive = (path: string) => {
             SITE.showGalleries && (
               <li>
                 <LinkButton
-                  href="/galleries"
+                  href={localizedGalleries}
                   class:list={[
                     "nav-link",
-                    { "nav-active": isActive("/galleries") },
+                    { "nav-active": isActive(localizedGalleries) },
                   ]}
                   title={t("nav.galleries")}
                   aria-label={t("nav.galleries")}>
@@ -181,22 +193,22 @@ const isActive = (path: string) => {
         <div class="mobile-menu-inner">
           <nav class="mobile-nav-links">
             <a
-              href="/posts"
-              class:list={["mobile-nav-link", { active: isActive("/posts") }]}
+              href={localizedPosts}
+              class:list={["mobile-nav-link", { active: isActive(localizedPosts) }]}
               style="--i:0">
               <span class="mobile-nav-indicator"></span>
               <span>{t("nav.posts")}</span>
             </a>
             <a
-              href="/tags"
-              class:list={["mobile-nav-link", { active: isActive("/tags") }]}
+              href={localizedTags}
+              class:list={["mobile-nav-link", { active: isActive(localizedTags) }]}
               style="--i:1">
               <span class="mobile-nav-indicator"></span>
               <span>{t("nav.tags")}</span>
             </a>
             <a
-              href="/about"
-              class:list={["mobile-nav-link", { active: isActive("/about") }]}
+              href={localizedAbout}
+              class:list={["mobile-nav-link", { active: isActive(localizedAbout) }]}
               style="--i:2">
               <span class="mobile-nav-indicator"></span>
               <span>{t("nav.about")}</span>
@@ -204,10 +216,10 @@ const isActive = (path: string) => {
             {
               SITE.showArchives && (
                 <a
-                  href="/archives"
+                  href={localizedArchives}
                   class:list={[
                     "mobile-nav-link",
-                    { active: isActive("/archives") },
+                    { active: isActive(localizedArchives) },
                   ]}
                   style="--i:3">
                   <span class="mobile-nav-indicator" />
@@ -218,10 +230,10 @@ const isActive = (path: string) => {
             {
               SITE.showGalleries && (
                 <a
-                  href="/galleries"
+                  href={localizedGalleries}
                   class:list={[
                     "mobile-nav-link",
-                    { active: isActive("/galleries") },
+                    { active: isActive(localizedGalleries) },
                   ]}
                   style="--i:4">
                   <span class="mobile-nav-indicator" />

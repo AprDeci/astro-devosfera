@@ -12,6 +12,7 @@ import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import { SITE } from "@/config";
 import { SOCIALS } from "@/constants";
 import IntroAudio from "@/components/IntroAudio.astro";
+import { getLangFromUrl, toLocalizedPath, useTranslations } from '@/i18n/utils';
 
 const posts = await getCollection("blog");
 
@@ -19,10 +20,9 @@ const sortedPosts = getSortedPosts(posts);
 const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
 const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
 
-import { getLangFromUrl, useTranslations } from '@/i18n/utils';
-
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+const localizedPosts = toLocalizedPath(lang, '/posts');
 
 const isDev = import.meta.env.DEV;
 
@@ -172,7 +172,7 @@ const isDev = import.meta.env.DEV;
           <!-- ═══════════════════ CTA ═══════════════════ -->
           <div class="mt-8 mb-4 flex justify-center w-full">
             <LinkButton
-              href="/posts/"
+              href={localizedPosts}
               class="group inline-flex items-center w-full sm:w-auto justify-center gap-2 rounded-xl border border-accent/20 bg-accent/10 px-8 py-4 text-base font-bold text-accent transition-all duration-300 hover:border-accent hover:bg-accent/20 hover:shadow-xl hover:shadow-accent/20 hover:-translate-y-0.5"
             >
               {t('index.viewAllPosts')}
@@ -223,7 +223,7 @@ const isDev = import.meta.env.DEV;
     const indexLayout = (document.querySelector("#main-content") as HTMLElement)
       ?.dataset?.layout;
     if (indexLayout) {
-      sessionStorage.setItem("backUrl", "/");
+      sessionStorage.setItem("backUrl", window.location.pathname);
     }
 
     // ── Card glow follow cursor ──

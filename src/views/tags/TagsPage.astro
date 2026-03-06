@@ -8,7 +8,7 @@ import IconHash from "@/assets/icons/IconHash.svg";
 import getUniqueTags from "@/utils/getUniqueTags";
 import getPostsByTag from "@/utils/getPostsByTag";
 import { SITE } from "@/config";
-import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { getLangFromUrl, toLocalizedPath, useTranslations } from "@/i18n/utils";
 
 const posts = await getCollection("blog");
 
@@ -59,7 +59,7 @@ const t = useTranslations(lang);
           const intensity = count / maxCount;
           return (
             <a
-              href={`/tags/${tag}/`}
+              href={toLocalizedPath(lang, `/tags/${tag}`)}
               transition:name={tag}
               class="tag-card group"
               data-tag-card
