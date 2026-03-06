@@ -1,0 +1,33 @@
+---
+import Main from "@/layouts/Main.astro";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Card from "@/components/Card.astro";
+import Pagination from "@/components/Pagination.astro";
+import { SITE } from "@/config";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+
+const { page, tagName } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+---
+
+<Layout title={`${t("tagDetail.title")}: ${tagName} | ${SITE.title}`}>
+  <Header />
+  <Main
+    pageTitle={[`${t("tagDetail.title")}: `, `${tagName}`]}
+    titleTransition={tagName}
+    pageDesc={t("tagDetail.description", { tag: tagName })}
+  >
+    <h1 slot="title" transition:name={tagName}>{`${t("tagDetail.title")}:${tagName}`}</h1>
+    <ul>
+      {page.data.map((data: (typeof page.data)[number]) => <Card {...data} />)}
+    </ul>
+  </Main>
+
+  <Pagination {page} />
+
+  <Footer noMarginTop={page.lastPage > 1} />
+</Layout>
