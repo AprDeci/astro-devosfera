@@ -25,12 +25,13 @@ const isActive = (path: string) => {
 <a
   id="skip-to-content"
   href="#main-content"
-  class="absolute start-16 -top-full z-50 rounded-b-lg bg-accent px-4 py-2 font-medium text-background transition-all focus:top-0"
->
+  class="absolute start-16 -top-full z-50 rounded-b-lg bg-accent px-4 py-2 font-medium text-background transition-all focus:top-0">
   Skip to content
 </a>
 
-<header id="main-header" class="sticky top-0 z-40 w-full transition-colors duration-300">
+<header
+  id="main-header"
+  class="sticky top-0 z-40 w-full transition-colors duration-300">
   <div class="app-layout">
     <div
       id="top-nav-wrap"
@@ -39,13 +40,11 @@ const isActive = (path: string) => {
         "relative w-full",
         "flex items-center justify-between",
         "transition-all duration-300",
-      ]}
-    >
+      ]}>
       <!-- Logo -->
       <a
         href="/"
-        class="group relative z-20 flex items-center gap-2 text-xl font-bold tracking-tight sm:text-2xl"
-      >
+        class="group relative z-20 flex items-center gap-2 text-xl font-bold tracking-tight sm:text-2xl">
         <!-- <span class="nav-logo-text">{SITE.title}</span> -->
         <Logo class="w-37.5 dark:invert" />
       </a>
@@ -58,8 +57,7 @@ const isActive = (path: string) => {
           class="hamburger-btn sm:hidden"
           aria-label="Open Menu"
           aria-expanded="false"
-          aria-controls="mobile-menu"
-        >
+          aria-controls="mobile-menu">
           <div class="hamburger-box">
             <span class="hamburger-line hamburger-line--1"></span>
             <span class="hamburger-line hamburger-line--2"></span>
@@ -107,8 +105,7 @@ const isActive = (path: string) => {
                     { "nav-active": isActive("/archives") },
                   ]}
                   title="Archives"
-                  aria-label="archives"
-                >
+                  aria-label="archives">
                   <IconArchive class="hidden sm:inline-block" />
                   <span class="sm:sr-only">Archives</span>
                 </LinkButton>
@@ -125,8 +122,7 @@ const isActive = (path: string) => {
                     { "nav-active": isActive("/galleries") },
                   ]}
                   title="Galerías"
-                  aria-label="galleries"
-                >
+                  aria-label="galleries">
                   <IconGallery class="hidden sm:inline-block" />
                   <span class="sm:sr-only">Galerías</span>
                 </LinkButton>
@@ -145,8 +141,7 @@ const isActive = (path: string) => {
               class="nav-search-btn"
               title="Buscar (⌘K)"
               aria-label="Abrir búsqueda"
-              aria-keyshortcuts="Meta+K"
-            >
+              aria-keyshortcuts="Meta+K">
               <IconSearch class="size-4.5" />
               <kbd class="nav-kbd">⌘K</kbd>
             </button>
@@ -159,8 +154,7 @@ const isActive = (path: string) => {
                   class="nav-icon-btn relative"
                   title="Toggles light & dark"
                   aria-label="auto"
-                  aria-live="polite"
-                >
+                  aria-live="polite">
                   <IconMoon class="absolute top-1/2 left-1/2 -translate-1/2 scale-100 rotate-0 transition-all duration-300 dark:scale-0 dark:-rotate-90" />
                   <IconSunHigh class="absolute top-1/2 left-1/2 -translate-1/2 scale-0 rotate-90 transition-all duration-300 dark:scale-100 dark:rotate-0" />
                 </button>
@@ -176,33 +170,31 @@ const isActive = (path: string) => {
   <div id="mobile-menu" class="mobile-menu sm:hidden" aria-hidden="true">
     <!-- Overlay/Backdrop -->
     <div class="mobile-menu-backdrop"></div>
-    
+
     <!-- Floating Glass Panel -->
     <div class="app-layout">
-      <div class="mobile-menu-panel relative mt-2 w-full mx-auto rounded-2xl border border-white/10 dark:border-white/5 overflow-hidden shadow-2xl">
+      <div
+        class="mobile-menu-panel relative mx-auto mt-2 w-full overflow-hidden rounded-2xl border border-white/10 shadow-2xl dark:border-white/5">
         <div class="mobile-menu-inner">
           <nav class="mobile-nav-links">
             <a
               href="/posts"
               class:list={["mobile-nav-link", { active: isActive("/posts") }]}
-              style="--i:0"
-            >
+              style="--i:0">
               <span class="mobile-nav-indicator"></span>
               <span>Posts</span>
             </a>
             <a
               href="/tags"
               class:list={["mobile-nav-link", { active: isActive("/tags") }]}
-              style="--i:1"
-            >
+              style="--i:1">
               <span class="mobile-nav-indicator"></span>
               <span>Tags</span>
             </a>
             <a
               href="/about"
               class:list={["mobile-nav-link", { active: isActive("/about") }]}
-              style="--i:2"
-            >
+              style="--i:2">
               <span class="mobile-nav-indicator"></span>
               <span>About</span>
             </a>
@@ -214,8 +206,7 @@ const isActive = (path: string) => {
                     "mobile-nav-link",
                     { active: isActive("/archives") },
                   ]}
-                  style="--i:3"
-                >
+                  style="--i:3">
                   <span class="mobile-nav-indicator" />
                   <span>Archives</span>
                 </a>
@@ -229,8 +220,7 @@ const isActive = (path: string) => {
                     "mobile-nav-link",
                     { active: isActive("/galleries") },
                   ]}
-                  style="--i:4"
-                >
+                  style="--i:4">
                   <span class="mobile-nav-indicator" />
                   <span>Galerías</span>
                 </a>
@@ -247,8 +237,7 @@ const isActive = (path: string) => {
               data-search-trigger
               class="mobile-action-btn flex-1 justify-center"
               title="Buscar (⌘K)"
-              aria-label="Abrir búsqueda"
-            >
+              aria-label="Abrir búsqueda">
               <IconSearch class="size-4" />
               <span>Search</span>
             </button>
@@ -259,8 +248,7 @@ const isActive = (path: string) => {
                   class="mobile-action-btn flex-1 justify-center"
                   title="Cambiar tema"
                   aria-label="auto"
-                  aria-live="polite"
-                >
+                  aria-live="polite">
                   <IconMoon class="block size-4 dark:hidden" />
                   <IconSunHigh class="hidden size-4 dark:block" />
                   <span class="block dark:hidden">Dark mode</span>
@@ -277,8 +265,7 @@ const isActive = (path: string) => {
   <!-- Bottom border with gradient -->
   <div
     id="header-border"
-    class="header-border-line opacity-0 transition-opacity duration-300 h-px w-full bg-linear-to-r from-transparent via-border/40 to-transparent"
-  >
+    class="header-border-line h-px w-full bg-linear-to-r from-transparent via-border/40 to-transparent opacity-0 transition-opacity duration-300">
   </div>
 </header>
 
@@ -287,9 +274,13 @@ const isActive = (path: string) => {
   #main-header {
     background: transparent;
   }
-  
+
   :global(.header-scrolled) {
-    background: color-mix(in srgb, var(--background) 80%, transparent) !important;
+    background: color-mix(
+      in srgb,
+      var(--background) 80%,
+      transparent
+    ) !important;
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
@@ -369,7 +360,9 @@ const isActive = (path: string) => {
     transition: all 0.2s ease;
   }
 
-  .nav-link:focus-visible, .nav-icon-btn:focus-visible, .nav-search-btn:focus-visible {
+  .nav-link:focus-visible,
+  .nav-icon-btn:focus-visible,
+  .nav-search-btn:focus-visible {
     outline: none;
     box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 50%, transparent);
   }
@@ -450,7 +443,7 @@ const isActive = (path: string) => {
     border-bottom-width: 2px;
     background: color-mix(in srgb, var(--background) 90%, transparent);
     color: var(--muted-foreground);
-    box-shadow: inset 0 -1px 0 rgba(0,0,0,0.1);
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
     transition: all 0.2s ease;
   }
 
@@ -571,7 +564,7 @@ const isActive = (path: string) => {
     background: color-mix(in srgb, var(--background) 80%, transparent);
     backdrop-filter: blur(24px) saturate(200%);
     -webkit-backdrop-filter: blur(24px) saturate(200%);
-    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
     /* Animation state */
     opacity: 0;
     transform: translateY(-8px) scale(0.98);
@@ -748,7 +741,7 @@ const isActive = (path: string) => {
     const backdrop = document.querySelector(".mobile-menu-backdrop");
 
     if (!menuBtn || !mobileMenu) return;
-    
+
     const closeMenu = () => {
       menuBtn.setAttribute("aria-expanded", "false");
       menuBtn.setAttribute("aria-label", "Open Menu");
@@ -772,7 +765,7 @@ const isActive = (path: string) => {
       },
       { signal }
     );
-    
+
     // Close when clicking the backdrop
     if (backdrop) {
       backdrop.addEventListener("click", closeMenu, { signal });

@@ -1,0 +1,102 @@
+---
+// src/components/LanguageSwitcher.astro
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+// 所有支持的语言（从配置文件读取更好，这里为了演示直接写死）
+const locales = {
+  zh: "简体中文",
+  en: "English",
+} as const;
+
+// 获取当前语言和当前路径
+const currentLang = (Astro.currentLocale || "zh") as keyof typeof locales;
+const currentPath = Astro.url.pathname
+  .replace(`/${currentLang}/`, "/") // 移除语言前缀
+  .replace(/^\//, ""); // 移除开头的斜杠
+---
+
+<div class="language-switcher">
+  <button class="lang-button">
+    {locales[currentLang]} ▼
+  </button>
+  <div class="lang-dropdown">
+    {
+      Object.entries(locales).map(([lang, label]) => {
+        const url = getRelativeLocaleUrl(lang, currentPath);
+        return (
+          <a href={url} class={lang === currentLang ? "active" : ""}>
+            {label}
+          </a>
+        );
+      })
+    }
+  </div>
+</div>
+
+<style>
+  .language-switcher {
+    position: relative;
+    display: inline-block;
+  }
+
+  .lang-button {
+    padding: 8px 16px;
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .lang-button:hover {
+    background: #e5e7eb;
+  }
+
+  .lang-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+    background: white;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-width: 150px;
+  }
+
+  .language-switcher:hover .lang-dropdown {
+    display: block;
+  }
+
+  .lang-dropdown a {
+    display: block;
+    padding: 10px 16px;
+    color: #374151;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .lang-dropdown a:hover {
+    background: #f3f4f6;
+  }
+
+  .lang-dropdown a.active {
+    background: #dbeafe;
+    color: #1e40af;
+    font-weight: 500;
+  }
+</style>
+
+<script>
+  // 移动端点击切换
+  document.querySelector(".lang-button")?.addEventListener("click", e => {
+    e.stopPropagation();
+    const dropdown = document.querySelector(".lang-dropdown");
+    dropdown?.classList.toggle("show");
+  });
+
+  // 点击其他地方关闭
+  document.addEventListener("click", () => {
+    document.querySelector(".lang-dropdown")?.classList.remove("show");
+  });
+</script>
