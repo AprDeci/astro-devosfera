@@ -4,6 +4,7 @@ import { ClientRouter } from "astro:transitions";
 import { PUBLIC_GOOGLE_SITE_VERIFICATION } from "astro:env/client";
 import { SITE } from "@/config";
 import SearchModal from "@/components/SearchModal.astro";
+import { getLangFromUrl } from "@/i18n/utils";
 import "@/styles/global.css";
 
 type Props = {
@@ -31,6 +32,7 @@ const {
 } = Astro.props;
 
 const socialImageURL = new URL(ogImage, Astro.url);
+const lang = getLangFromUrl(Astro.url);
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -52,7 +54,7 @@ const structuredData = {
 <!doctype html>
 <html
   dir={SITE.dir}
-  lang={`${SITE.lang ?? "en"}`}
+  lang={lang}
   class={`${scrollSmooth ? "scroll-smooth" : ""}`}
 >
   <head>

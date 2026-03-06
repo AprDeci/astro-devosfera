@@ -12,6 +12,7 @@ import GalleryEmbed from "@/components/GalleryEmbed.astro";
 import { getPath } from "@/utils/getPath";
 import { slugifyStr } from "@/utils/slugify";
 import { SITE } from "@/config";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 
 type Props = {
   post: CollectionEntry<"blog">;
@@ -19,6 +20,8 @@ type Props = {
 };
 
 const { post, posts } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 const {
   title,
@@ -193,7 +196,7 @@ const nextPost =
       
       <div class="relative z-10 flex items-center gap-2 font-cartograph text-[10px] tracking-widest text-accent/40 uppercase select-none">
         <span class="h-1.5 w-1.5 rounded-full bg-accent/50 shadow-[0_0_8px_var(--color-accent)]"></span>
-        fin
+        {t("postDetails.end")}
       </div>
 
       <div class="relative h-px flex-1 bg-linear-to-l from-transparent via-border/30 to-accent/20">
@@ -257,7 +260,7 @@ const nextPost =
                 <polyline points="12 19 5 12 12 5" />
               </svg>
               <span class="font-cartograph text-[10px] tracking-wider text-foreground/35 uppercase">
-                Anterior
+                {t("postDetails.previous")}
               </span>
             </div>
             <span class="line-clamp-2 text-sm leading-snug font-medium text-foreground/70 transition-colors duration-200 group-hover:text-accent">
@@ -277,7 +280,7 @@ const nextPost =
             <div class="post-nav-bg" />
             <div class="flex items-center gap-1.5">
               <span class="font-cartograph text-[10px] tracking-wider text-foreground/35 uppercase">
-                Siguiente
+                {t("postDetails.next")}
               </span>
               <svg
                 class="size-3.5 text-accent/50 transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180"
@@ -303,6 +306,14 @@ const nextPost =
   <BackToTopButton />
   <Footer />
 </Layout>
+
+<div
+  hidden
+  id="post-i18n-data"
+  data-heading-link={t("postDetails.headingLink")}
+  data-copy={t("postDetails.copy")}
+  data-copied={t("postDetails.copied")}
+></div>
 
 <script is:inline data-astro-rerun>
   /** Create a progress indicator
@@ -349,6 +360,9 @@ const nextPost =
   /** Attaches links to headings in the document,
    *  allowing sharing of sections easily */
   function addHeadingLinks() {
+    const i18nData = document.getElementById("post-i18n-data");
+    const headingLinkLabel =
+      i18nData?.getAttribute("data-heading-link") || "Link to heading";
     const headings = Array.from(
       document.querySelectorAll("h2, h3, h4, h5, h6")
     );
@@ -363,7 +377,7 @@ const nextPost =
       span.ariaHidden = "true";
       span.innerText = "#";
       link.appendChild(span);
-      link.ariaLabel = "link to heading";
+      link.ariaLabel = headingLinkLabel;
       heading.appendChild(link);
     }
   }
@@ -372,7 +386,10 @@ const nextPost =
   /** Attaches copy buttons to code blocks in the document,
    * allowing users to copy code easily. */
   function attachCopyButtons() {
-    const copyButtonLabel = "Copy";
+    const i18nData = document.getElementById("post-i18n-data");
+    const copyButtonLabel = i18nData?.getAttribute("data-copy") || "Copy";
+    const copiedButtonLabel =
+      i18nData?.getAttribute("data-copied") || "Copied";
     const codeBlocks = Array.from(document.querySelectorAll("pre"));
 
     for (const codeBlock of codeBlocks) {
@@ -411,7 +428,7 @@ const nextPost =
       await navigator.clipboard.writeText(text ?? "");
 
       // visual feedback that task is completed
-      button.innerText = "Copied";
+      button.innerText = copiedButtonLabel;
 
       setTimeout(() => {
         button.innerText = copyButtonLabel;

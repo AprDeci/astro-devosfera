@@ -1,5 +1,9 @@
 ---
 import IconArrowNarrowUp from "@/assets/icons/IconArrowNarrowUp.svg";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <div
@@ -12,6 +16,7 @@ import IconArrowNarrowUp from "@/assets/icons/IconArrowNarrowUp.svg";
 >
   <button
     data-button="back-to-top"
+    aria-label={t("backToTop.label")}
     class:list={[
       "group relative flex flex-col items-center justify-center gap-0.5",
       "size-14 rounded-full",
@@ -37,7 +42,7 @@ import IconArrowNarrowUp from "@/assets/icons/IconArrowNarrowUp.svg";
     <span
       class="relative z-20 text-[9px] font-bold tracking-widest text-accent/70 uppercase"
     >
-      top
+      {t("backToTop.label")}
     </span>
   </button>
 </div>

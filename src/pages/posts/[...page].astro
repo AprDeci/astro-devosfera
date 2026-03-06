@@ -10,6 +10,7 @@ import Pagination from "@/components/Pagination.astro";
 import "@pagefind/default-ui/css/ui.css";
 import getSortedPosts from "@/utils/getSortedPosts";
 import { SITE } from "@/config";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -18,9 +19,11 @@ export const getStaticPaths = (async ({ paginate }) => {
 
 const { page } = Astro.props;
 const totalPosts = page.total;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
-<Layout title={`Posts | ${SITE.title}`}>
+<Layout title={`${t("posts.title")} | ${SITE.title}`}>
   <Header />
   <Breadcrumb />
   <main id="main-content" class="app-layout pb-4">
@@ -32,17 +35,20 @@ const totalPosts = page.total;
       <div class="aurora-mouse" data-posts-mouse></div>
       <div class="relative z-10">
         <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
-          <span class="glow-text">Posts</span>
+          <span class="glow-text">{t("posts.title")}</span>
         </h1>
         <p class="mt-3 max-w-lg text-foreground/70 italic">
-          Todos los artículos que he publicado.
+          {t("posts.description")}
         </p>
         <div class="mt-4 flex flex-wrap items-center gap-2">
-          <span class="hero-badge">{totalPosts} posts</span>
+          <span class="hero-badge">{totalPosts} {t("posts.count")}</span>
           {
             page.lastPage > 1 && (
               <span class="hero-badge">
-                Página {page.currentPage}/{page.lastPage}
+                {t("posts.page", {
+                  current: page.currentPage,
+                  total: page.lastPage,
+                })}
               </span>
             )
           }
@@ -53,7 +59,12 @@ const totalPosts = page.total;
     <!-- Posts Toolbar -->
     <div class="posts-toolbar mb-8">
       <div class="posts-search-wrapper">
-        <div id="posts-pagefind" class="premium-search"></div>
+        <div
+          id="posts-pagefind"
+          class="premium-search"
+          data-dev-warning-title={t("posts.devWarningTitle")}
+          data-dev-warning-text={t("posts.devWarningText")}
+        ></div>
       </div>
     </div>
 
@@ -77,9 +88,9 @@ const totalPosts = page.total;
                 <line x1="9" y1="15" x2="15" y2="15"></line>
               </svg>
             </div>
-            <h3 class="empty-title">Aún no hay posts</h3>
+            <h3 class="empty-title">{t("posts.emptyTitle")}</h3>
             <p class="empty-desc">
-              Vuelve más tarde para leer nuestros próximos artículos.
+              {t("posts.emptyDescription")}
             </p>
           </div>
         ) : (
@@ -105,6 +116,12 @@ const totalPosts = page.total;
     if (cleanupController) cleanupController.abort();
     cleanupController = new AbortController();
     const { signal } = cleanupController;
+    const containerEl = document.querySelector("#posts-pagefind") as HTMLElement | null;
+    const devWarningTitle =
+      containerEl?.dataset.devWarningTitle || "DEV mode";
+    const devWarningText =
+      containerEl?.dataset.devWarningText ||
+      "Search will try to use the most recent built index; if no results appear, run a build first.";
 
     // Hero mouse glow
     const hero = document.querySelector("[data-posts-hero]") as HTMLElement;
@@ -124,7 +141,7 @@ const totalPosts = page.total;
     }
 
     // Initialize Pagefind local search
-    const container = document.querySelector("#posts-pagefind");
+    const container = containerEl;
     if (!container || container.childElementCount > 0) return;
 
     const onIdle = window.requestIdleCallback || (cb => setTimeout(cb, 1));
@@ -141,7 +158,7 @@ const totalPosts = page.total;
       if (import.meta.env.DEV) {
         container.innerHTML = `
           <div class="bg-muted/75 rounded p-4 text-sm mb-4 border border-border">
-            <p><strong>Dev Mode:</strong> La búsqueda intentará usar el índice construido más reciente. Si no ves resultados, ejecuta <code>pnpm run build</code> primero.</p>
+            <p><strong>${devWarningTitle}:</strong> ${devWarningText} <code>pnpm run build</code></p>
           </div>
         `;
         // Removed the early return to allow pagefind to attempt loading the local index

@@ -8,6 +8,7 @@ import Footer from "@/components/Footer.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import Datetime from "@/components/Datetime.astro";
 import { SITE } from "@/config";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 
 export async function getStaticPaths() {
   if (!SITE.showGalleries) return [];
@@ -26,6 +27,8 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { gallery: slug } = Astro.params;
 const { title, description, pubDatetime, coverImage, tags } = entry.data;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 // Cargar todas las imágenes de la galería en build-time con un glob estático
 const allImages = import.meta.glob<{ default: ImageMetadata }>(
@@ -63,7 +66,7 @@ const hasCoverInFolder = coverImage
   : false;
 ---
 
-<Layout title={`${title} | Galerías | ${SITE.title}`} description={description}>
+<Layout title={`${title} | ${t("galleryDetail.parentTitle")} | ${SITE.title}`} description={description}>
   <Header />
   <Breadcrumb />
   <main id="main-content" class="app-layout pb-16">
@@ -89,7 +92,7 @@ const hasCoverInFolder = coverImage
       }
       <p class="mt-4 text-sm text-foreground/50">
         {images.length}
-        {images.length === 1 ? "imagen" : "imágenes"}
+        {" "}{images.length === 1 ? t("galleryDetail.image") : t("galleryDetail.images")}
       </p>
     </header>
 
@@ -116,14 +119,14 @@ const hasCoverInFolder = coverImage
           class="gallery-grid mt-6"
           id="gallery-grid"
           role="list"
-          aria-label={`Imágenes de ${title}`}
+          aria-label={t("galleryDetail.gridLabel", { title })}
         >
           {images.map((img, idx) => (
             <li>
               <button
                 class="gallery-item group"
                 data-index={idx}
-                aria-label={`Ver imagen: ${img.alt}`}
+                aria-label={t("galleryDetail.openImage", { alt: img.alt })}
                 type="button"
               >
                 <Image
@@ -143,7 +146,7 @@ const hasCoverInFolder = coverImage
         </ul>
       ) : (
         <p class="mt-12 text-center text-foreground/50 italic">
-          Esta galería todavía no tiene imágenes.
+          {t("galleryDetail.empty")}
         </p>
       )
     }
@@ -155,13 +158,13 @@ const hasCoverInFolder = coverImage
 <dialog
   id="lightbox"
   class="lightbox"
-  aria-label="Visor de imagen"
+  aria-label={t("galleryDetail.lightbox")}
   aria-modal="true"
 >
   <button
     class="lightbox-close"
     id="lightbox-close"
-    aria-label="Cerrar"
+    aria-label={t("galleryDetail.close")}
     type="button"
   >
     <svg
@@ -182,7 +185,7 @@ const hasCoverInFolder = coverImage
   <button
     class="lightbox-nav lightbox-prev"
     id="lightbox-prev"
-    aria-label="Anterior"
+    aria-label={t("galleryDetail.prev")}
     type="button"
   >
     <svg
@@ -207,7 +210,7 @@ const hasCoverInFolder = coverImage
   <button
     class="lightbox-nav lightbox-next"
     id="lightbox-next"
-    aria-label="Siguiente"
+    aria-label={t("galleryDetail.next")}
     type="button"
   >
     <svg

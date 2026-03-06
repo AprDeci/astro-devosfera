@@ -4,12 +4,15 @@ import type { CollectionEntry } from "astro:content";
 import IconArrowLeft from "@/assets/icons/IconArrowLeft.svg";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import LinkButton from "./LinkButton.astro";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 
 type Props = {
   page: Page<CollectionEntry<"blog">>;
 };
 
 const { page } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 {
@@ -17,7 +20,7 @@ const { page } = Astro.props;
     <nav
       class="mt-12 mb-8 flex items-center justify-center gap-4"
       role="navigation"
-      aria-label="Pagination Navigation"
+      aria-label={t("pagination.nav")}
     >
       <LinkButton
         disabled={!page.url.prev}
@@ -26,7 +29,7 @@ const { page } = Astro.props;
           "pagination-btn select-none group/btn",
           { "opacity-50 pointer-events-none": !page.url.prev }
         ]}
-        aria-label="Goto Previous Page"
+        aria-label={t("pagination.prev")}
       >
         <span class="btn-icon-wrapper">
           <IconArrowLeft class="size-4.5 transition-transform duration-300 group-hover/btn:-translate-x-0.5" />
@@ -46,7 +49,7 @@ const { page } = Astro.props;
           "pagination-btn select-none group/btn",
           { "opacity-50 pointer-events-none": !page.url.next }
         ]}
-        aria-label="Goto Next Page"
+        aria-label={t("pagination.next")}
       >
         <span class="btn-icon-wrapper">
           <IconArrowRight class="size-4.5 transition-transform duration-300 group-hover/btn:translate-x-0.5" />

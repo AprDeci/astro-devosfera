@@ -1,30 +1,35 @@
 ---
-// src/components/LanguageSwitcher.astro
 import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 
-// 所有支持的语言（从配置文件读取更好，这里为了演示直接写死）
 const locales = {
   zh: "简体中文",
   en: "English",
 } as const;
 
-// 获取当前语言和当前路径
-const currentLang = (Astro.currentLocale || "zh") as keyof typeof locales;
+const currentLang = getLangFromUrl(Astro.url) as keyof typeof locales;
 const currentPath = Astro.url.pathname
-  .replace(`/${currentLang}/`, "/") // 移除语言前缀
-  .replace(/^\//, ""); // 移除开头的斜杠
+  .replace(new RegExp(`^/${currentLang}(?=/|$)`), "")
+  .replace(/^\//, "");
+const t = useTranslations(currentLang);
 ---
 
 <div class="language-switcher">
-  <button class="lang-button">
-    {locales[currentLang]} ▼
+  <button
+    class="lang-button"
+    type="button"
+    aria-label={t("switcher.label")}
+    aria-haspopup="true"
+    aria-expanded="false"
+  >
+    {locales[currentLang]} <span aria-hidden="true">▼</span>
   </button>
   <div class="lang-dropdown">
     {
       Object.entries(locales).map(([lang, label]) => {
         const url = getRelativeLocaleUrl(lang, currentPath);
         return (
-          <a href={url} class={lang === currentLang ? "active" : ""}>
+          <a href={url} class={lang === currentLang ? "active" : ""} lang={lang}>
             {label}
           </a>
         );
@@ -47,7 +52,8 @@ const currentPath = Astro.url.pathname
     cursor: pointer;
   }
 
-  .lang-button:hover {
+  .lang-button:hover,
+  .language-switcher:focus-within .lang-button {
     background: #e5e7eb;
   }
 
@@ -62,9 +68,12 @@ const currentPath = Astro.url.pathname
     border-radius: 6px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     min-width: 150px;
+    z-index: 10;
   }
 
-  .language-switcher:hover .lang-dropdown {
+  .language-switcher:hover .lang-dropdown,
+  .language-switcher:focus-within .lang-dropdown,
+  .lang-dropdown.show {
     display: block;
   }
 
@@ -88,15 +97,19 @@ const currentPath = Astro.url.pathname
 </style>
 
 <script>
-  // 移动端点击切换
-  document.querySelector(".lang-button")?.addEventListener("click", e => {
+  const switcher = document.querySelector(".language-switcher");
+  const button = switcher?.querySelector(".lang-button");
+  const dropdown = switcher?.querySelector(".lang-dropdown");
+
+  button?.addEventListener("click", e => {
     e.stopPropagation();
-    const dropdown = document.querySelector(".lang-dropdown");
-    dropdown?.classList.toggle("show");
+    const expanded = button.getAttribute("aria-expanded") === "true";
+    button.setAttribute("aria-expanded", String(!expanded));
+    dropdown?.classList.toggle("show", !expanded);
   });
 
-  // 点击其他地方关闭
   document.addEventListener("click", () => {
-    document.querySelector(".lang-dropdown")?.classList.remove("show");
+    button?.setAttribute("aria-expanded", "false");
+    dropdown?.classList.remove("show");
   });
 </script>

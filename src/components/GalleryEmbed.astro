@@ -14,6 +14,7 @@
 import type { ImageMetadata } from "astro";
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 
 type Props = {
   slug: string;
@@ -23,6 +24,8 @@ type Props = {
 };
 
 const { slug, limit = 6, showLink = true, cols = 3 } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 // ── 1. Buscar la entrada de la colección por slug ────────────────────────────
 // Se obtienen TODAS (incluyendo drafts) para que el embed funcione en preview;
@@ -87,8 +90,7 @@ const gridClass = {
 {
   !entry ? (
     <div class="ge-error">
-      ⚠️ Galería <code>{slug}</code> no encontrada. Verifica que exista{" "}
-      <code>src/data/galleries/{slug}/index.md</code>.
+      {t("galleryEmbed.notFound", { slug })}
     </div>
   ) : (
     <figure class="gallery-embed not-prose" data-gallery-embed={slug}>
@@ -112,7 +114,7 @@ const gridClass = {
           <rect x="14" y="14" width="7" height="7" rx="1" />
         </svg>
         <span class="ge-title">{entry.data.title}</span>
-        {remaining > 0 && <span class="ge-count">+{remaining} más</span>}
+        {remaining > 0 && <span class="ge-count">{t("galleryEmbed.more", { count: remaining })}</span>}
       </div>
 
       {/* Grid de imágenes */}
@@ -120,7 +122,7 @@ const gridClass = {
         <ul
           class:list={["ge-grid", gridClass]}
           role="list"
-          aria-label={`Galería: ${entry.data.title}`}
+          aria-label={t("galleryEmbed.label", { title: entry.data.title })}
         >
           {visibleImages.map((img, idx) => (
             <li>
@@ -128,7 +130,7 @@ const gridClass = {
                 class="ge-item group"
                 data-lb={lbId}
                 data-index={idx}
-                aria-label={`Ver imagen: ${img.alt}`}
+                aria-label={t("galleryEmbed.openImage", { alt: img.alt })}
                 type="button"
               >
                 <Image
@@ -147,7 +149,7 @@ const gridClass = {
           ))}
         </ul>
       ) : (
-        <p class="ge-empty">Esta galería todavía no tiene imágenes.</p>
+        <p class="ge-empty">{t("galleryEmbed.empty")}</p>
       )}
 
       {/* Pie: descripción + enlace a la galería completa */}
@@ -157,7 +159,7 @@ const gridClass = {
         )}
         {showLink && (
           <a href={`/galleries/${slug}`} class="ge-link">
-            Ver galería completa
+            {t("galleryEmbed.viewFull")}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="14"
@@ -183,13 +185,13 @@ const gridClass = {
 <dialog
   id={lbId}
   class="ge-lightbox"
-  aria-label={`Visor: ${entry?.data.title ?? slug}`}
+  aria-label={t("galleryEmbed.lightbox", { title: entry?.data.title ?? slug })}
   aria-modal="true"
 >
   <button
     class="ge-lb-close"
     data-lb-close={lbId}
-    aria-label="Cerrar"
+    aria-label={t("galleryEmbed.close")}
     type="button"
   >
     <svg
@@ -210,7 +212,7 @@ const gridClass = {
   <button
     class="ge-lb-nav ge-lb-prev"
     data-lb-prev={lbId}
-    aria-label="Anterior"
+    aria-label={t("galleryEmbed.prev")}
     type="button"
   >
     <svg
@@ -235,7 +237,7 @@ const gridClass = {
   <button
     class="ge-lb-nav ge-lb-next"
     data-lb-next={lbId}
-    aria-label="Siguiente"
+    aria-label={t("galleryEmbed.next")}
     type="button"
   >
     <svg
