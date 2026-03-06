@@ -1,8 +1,13 @@
 # Devosfera Blog
 
+## 个人修改
+
+- 多语言支持(UI 内容暂未支持)
+- 调整部分CSS
+
 Heavily customized version of the [AstroPaper](https://github.com/satnaing/astro-paper) theme with a **Terminal/Cyberpunk** aesthetic, image galleries, global search modal, and dozens of visual and interactive improvements.
 
-**🌐 Live demo:** [devosfera.vercel.app](https://devosfera.vercel.app)
+**🌐 Live demo:** [Aprdec's Sky](https://astro.aprdec.top)
 
 ![Devosfera OG](public/devosfera-og.webp)
 
