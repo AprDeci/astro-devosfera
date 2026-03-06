@@ -108,7 +108,7 @@ const zh = {
   "pagination.prev": "上一页",
   "pagination.next": "下一页",
   "footer.tagline": "一个将好奇心转化为代码的空间。",
-  "footer.connect": "连接",
+  "footer.connect": "联系",
   "footer.rightsReserved": "保留所有权利。",
   "footer.madeWith": "用",
   "footer.andCoffee": "和大量咖啡打造",
