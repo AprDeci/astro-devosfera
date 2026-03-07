@@ -1,0 +1,37 @@
+---
+import { SITE } from "@/config";
+import "@/styles/twikoo.css"
+
+const isCommentEnabled = SITE.comment.enabled && SITE.comment.envId.trim() !== "";
+const twikooEnvId = SITE.comment.envId;
+---
+
+{
+  isCommentEnabled && <div id="tcomment"></div>
+}
+
+{
+  isCommentEnabled && (
+    <script define:vars={{ twikooEnvId }}>
+      document.addEventListener("astro:page-load", () => {
+        function loadTwikoo() {
+          const commentsContainer = document.getElementById("tcomment");
+          if (commentsContainer) {
+            const script = document.createElement("script");
+            script.src =
+              "https://registry.npmmirror.com/twikoo/1.7.1/files/dist/twikoo.min.js";
+            script.async = true;
+            script.onload = () => {
+              twikoo.init({
+                envId: twikooEnvId,
+                el: "#tcomment",
+              });
+            };
+            document.body.appendChild(script);
+          }
+        }
+        loadTwikoo();
+      });
+    </script>
+  )
+}

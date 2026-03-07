@@ -27,4 +27,8 @@ export const SITE = {
     label: "INTRO.MP3", // etiqueta display en el reproductor
     duration: 30, // duración en segundos (para la barra de progreso fija)
   },
+  comment: {
+    enabled: true,
+    envId: "https://twikoo.aprdec.top",
+  },
 } as const;
