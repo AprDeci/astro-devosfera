@@ -6,6 +6,7 @@ import Footer from "@/components/Footer.astro";
 import Socials from "@/components/Socials.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import Card from "@/components/Card.astro";
+import HomeGalleryCard from "@/components/HomeGalleryCard.astro";
 import getSortedPosts from "@/utils/getSortedPosts";
 import IconRss from "@/assets/icons/IconRss.svg";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
@@ -13,12 +14,30 @@ import { SITE } from "@/config";
 import { SOCIALS } from "@/constants";
 import IntroAudio from "@/components/IntroAudio.astro";
 import { getLangFromUrl, toLocalizedPath, useTranslations } from '@/i18n/utils';
+import { getSortedGalleries, type SortedGallery } from "@/utils/getGallerys";
 
 const posts = await getCollection("blog");
 
 const sortedPosts = getSortedPosts(posts);
 const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
 const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+
+const rawGalleries = await getCollection("galleries", ({ data }) => !data.draft);
+const galleries = getSortedGalleries(rawGalleries);
+type FeedItem = 
+  | { type: "post"; data: typeof recentPosts[number] }
+  | { type: "gallery"; data: SortedGallery };
+
+const recentFeed: FeedItem[] = [
+  ...recentPosts.map(data => ({ type: "post" as const, data })),
+  ...galleries.map(data => ({ type: "gallery" as const, data })),
+].sort(
+  (a, b) => {
+    const dateA = a.type === "post" ? a.data.data.pubDatetime : a.data.gallery.data.pubDatetime;
+    const dateB = b.type === "post" ? b.data.data.pubDatetime : b.data.gallery.data.pubDatetime;
+    return new Date(dateB).getTime() - new Date(dateA).getTime();
+  }
+).slice(0, SITE.postPerIndex);
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -150,7 +169,7 @@ const isDev = import.meta.env.DEV;
 
     <!-- ═══════════════════ RECENT POSTS ═══════════════════ -->
     {
-      recentPosts.length > 0 && (
+      recentFeed.length > 0 && (
         <section id="recent-posts" class="pt-6 pb-6">
           <div class="mb-6 flex items-center gap-3">
             <h2 class="text-sm font-bold tracking-widest uppercase">
@@ -158,15 +177,16 @@ const isDev = import.meta.env.DEV;
             </h2>
             <div class="h-px flex-1 bg-border/20" />
             <span class="font-cartograph text-xs text-accent/40 select-none">
-              [{recentPosts.slice(0, SITE.postPerIndex).length}/
-              {recentPosts.length}]
+              [{recentFeed.length}/
+              {recentPosts.length + galleries.length}]
             </span>
           </div>
           <ul>
-            {recentPosts.map(
-              (data, index) =>
-                index < SITE.postPerIndex && <Card variant="h3" {...data} />
-            )}
+            {recentFeed.map((item) => (
+              item.type === "post" 
+                ? <Card variant="h3" {...item.data} />
+                : <HomeGalleryCard gallery={item.data.gallery} slug={item.data.slug} fallbackImage={item.data.fallbackImage} thumbnails={item.data.thumbnails} imageCount={item.data.imageCount} />
+            ))}
           </ul>
 
           <!-- ═══════════════════ CTA ═══════════════════ -->
