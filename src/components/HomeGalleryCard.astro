@@ -41,74 +41,72 @@ const THUMBNAIL_COUNT = 3;
   </div>
 
   <div class="relative z-5">
-    <a href={href} class="flex items-start justify-between gap-3">
+    <a href={href} class="flex flex-col gap-3 md:flex-row md:items-start">
       <div class="min-w-0 flex-1">
-        <div class="flex justify-between">
-          <div>
-            <div class="mb-1 flex items-center gap-2">
-              <span
-                class="inline-flex items-center gap-1 rounded-md bg-accent/10 px-2 py-0.5 text-xs font-medium text-accent">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round">
-                  <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-                  <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-                  <rect x="3" y="14" width="7" height="7" rx="1"></rect>
-                  <rect x="14" y="14" width="7" height="7" rx="1"></rect>
-                </svg>
-                {t("nav.galleries")}
-              </span>
-            </div>
-            <h3
-              class="text-lg font-semibold text-foreground transition-colors duration-200 group-hover/card:text-accent">
-              {title}
-              <span
-                class="absolute -inset-4 z-10 sm:-inset-5"
-                aria-hidden="true"></span>
-            </h3>
-            <Datetime
-              pubDatetime={pubDatetime}
-              class="pointer-events-none relative z-20 mt-1.5"
-            />
+        <div>
+          <div class="mb-1 flex items-center gap-2">
+            <span
+              class="inline-flex items-center gap-1 rounded-md bg-accent/10 px-2 py-0.5 text-xs font-medium text-accent">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+              </svg>
+              {t("nav.galleries")}
+            </span>
           </div>
-          {
-            thumbnails && thumbnails.length > 0 && (
-              <div class="flex items-center gap-2 overflow-hidden">
-                <div class="flex -space-x-3">
-                  {thumbnails.slice(0, THUMBNAIL_COUNT).map((thumb, i) => (
-                    <div class="relative aspect-square w-16 overflow-hidden rounded-lg border-2 border-background shadow-sm">
-                      <Image
-                        src={thumb}
-                        alt=""
-                        class="h-full w-full object-cover transition-transform duration-300 group-hover/card:scale-105"
-                        loading="lazy"
-                        widths={[120]}
-                        sizes="64px"
-                      />
-                    </div>
-                  ))}
-                </div>
-                {imageCount !== undefined && imageCount > THUMBNAIL_COUNT && (
-                  <span class="flex-shrink-0 text-xs font-medium text-foreground/50">
-                    +{imageCount - THUMBNAIL_COUNT}
-                  </span>
-                )}
-              </div>
-            )
-          }
+          <h3
+            class="text-lg font-semibold text-foreground transition-colors duration-200 group-hover/card:text-accent">
+            {title}
+            <span
+              class="absolute -inset-4 z-10 sm:-inset-5"
+              aria-hidden="true"></span>
+          </h3>
+          <Datetime
+            pubDatetime={pubDatetime}
+            class="pointer-events-none relative z-20 mt-1.5"
+          />
         </div>
         <p
           class="pointer-events-auto relative z-20 mt-2 line-clamp-2 text-sm leading-relaxed opacity-65 select-text">
           {description}
         </p>
       </div>
+      {
+        thumbnails && thumbnails.length > 0 && (
+          <div class="flex items-center gap-2 overflow-hidden md:flex-shrink-0 md:self-start">
+            <div class="flex -space-x-3">
+              {thumbnails.slice(0, THUMBNAIL_COUNT).map((thumb, i) => (
+                <div class="relative aspect-square w-16 overflow-hidden rounded-lg border-2 border-background shadow-sm">
+                  <Image
+                    src={thumb}
+                    alt=""
+                    class="h-full w-full object-cover transition-transform duration-300 group-hover/card:scale-105"
+                    loading="lazy"
+                    widths={[120]}
+                    sizes="64px"
+                  />
+                </div>
+              ))}
+            </div>
+            {imageCount !== undefined && imageCount > THUMBNAIL_COUNT && (
+              <span class="flex-shrink-0 text-xs font-medium text-foreground/50">
+                +{imageCount - THUMBNAIL_COUNT}
+              </span>
+            )}
+          </div>
+        )
+      }
     </a>
   </div>
 </li>

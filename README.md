@@ -4,7 +4,8 @@
 
 - 多语言支持(UI 内容暂未支持)
 - 调整部分CSS
-- twikoo评论适配
+- twikoo评论适配(可选)
+- 最近发布添加画廊卡片(可选)
 
 Heavily customized version of the [AstroPaper](https://github.com/satnaing/astro-paper) theme with a **Terminal/Cyberpunk** aesthetic, image galleries, global search modal, and dozens of visual and interactive improvements.
 
