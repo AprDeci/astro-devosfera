@@ -30,27 +30,22 @@ const THUMBNAIL_COUNT = 3;
     "hover:border-accent/40 hover:bg-accent/5",
     "hover:-translate-y-0.5",
     "hover:shadow-lg hover:shadow-accent/10",
-  ]}
->
+  ]}>
   <div
     class="card-glow-effect pointer-events-none absolute inset-0 z-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover/card:opacity-100"
-    aria-hidden="true"
-  >
+    aria-hidden="true">
   </div>
   <div
     class="card-noise pointer-events-none absolute inset-0 z-1 rounded-2xl opacity-0 transition-opacity duration-300 group-hover/card:opacity-100"
-    aria-hidden="true"
-  >
+    aria-hidden="true">
   </div>
 
-  <div class="relative z-5">
-    <a
-      href={href}
-      class="flex items-start justify-between gap-3"
-    >
-      <div class="flex-1 min-w-0">
-        <div class="flex items-center gap-2 mb-1">
-          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-accent/10 text-accent text-xs font-medium">
+  <div class="relative z-5 flex justify-between">
+    <a href={href} class="flex items-start justify-between gap-3">
+      <div class="min-w-0 flex-1">
+        <div class="mb-1 flex items-center gap-2">
+          <span
+            class="inline-flex items-center gap-1 rounded-md bg-accent/10 px-2 py-0.5 text-xs font-medium text-accent">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="12"
@@ -60,50 +55,57 @@ const THUMBNAIL_COUNT = 3;
               stroke="currentColor"
               stroke-width="2"
               stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <rect x="3" y="3" width="7" height="7" rx="1" />
-              <rect x="14" y="3" width="7" height="7" rx="1" />
-              <rect x="3" y="14" width="7" height="7" rx="1" />
-              <rect x="14" y="14" width="7" height="7" rx="1" />
+              stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
             </svg>
             {t("nav.galleries")}
           </span>
         </div>
-        <h3 class="text-lg font-semibold text-foreground transition-colors duration-200 group-hover/card:text-accent">
+        <h3
+          class="text-lg font-semibold text-foreground transition-colors duration-200 group-hover/card:text-accent">
           {title}
-          <span class="absolute -inset-4 sm:-inset-5 z-10" aria-hidden="true"></span>
+          <span class="absolute -inset-4 z-10 sm:-inset-5" aria-hidden="true"
+          ></span>
         </h3>
-        <Datetime pubDatetime={pubDatetime} class="relative z-20 mt-1.5 pointer-events-none" />
-        <p class="relative z-20 mt-2 line-clamp-2 text-sm leading-relaxed opacity-65 pointer-events-auto select-text">
+        <Datetime
+          pubDatetime={pubDatetime}
+          class="pointer-events-none relative z-20 mt-1.5"
+        />
+        <p
+          class="pointer-events-auto relative z-20 mt-2 line-clamp-2 text-sm leading-relaxed opacity-65 select-text">
           {description}
         </p>
       </div>
     </a>
 
-    {thumbnails && thumbnails.length > 0 && (
-      <div class="mt-4 flex items-center gap-2 overflow-hidden">
-        <div class="flex -space-x-3">
-          {thumbnails.slice(0, THUMBNAIL_COUNT).map((thumb, i) => (
-            <div class="relative aspect-square w-16 overflow-hidden rounded-lg border-2 border-background shadow-sm">
-              <Image
-                src={thumb}
-                alt=""
-                class="h-full w-full object-cover transition-transform duration-300 group-hover/card:scale-105"
-                loading="lazy"
-                widths={[120]}
-                sizes="64px"
-              />
-            </div>
-          ))}
+    {
+      thumbnails && thumbnails.length > 0 && (
+        <div class="flex items-center gap-2 overflow-hidden">
+          <div class="flex -space-x-3">
+            {thumbnails.slice(0, THUMBNAIL_COUNT).map((thumb, i) => (
+              <div class="relative aspect-square w-16 overflow-hidden rounded-lg border-2 border-background shadow-sm">
+                <Image
+                  src={thumb}
+                  alt=""
+                  class="h-full w-full object-cover transition-transform duration-300 group-hover/card:scale-105"
+                  loading="lazy"
+                  widths={[120]}
+                  sizes="64px"
+                />
+              </div>
+            ))}
+          </div>
+          {imageCount !== undefined && imageCount > THUMBNAIL_COUNT && (
+            <span class="flex-shrink-0 text-xs font-medium text-foreground/50">
+              +{imageCount - THUMBNAIL_COUNT}
+            </span>
+          )}
         </div>
-        {imageCount !== undefined && imageCount > THUMBNAIL_COUNT && (
-          <span class="flex-shrink-0 text-xs font-medium text-foreground/50">
-            +{imageCount - THUMBNAIL_COUNT}
-          </span>
-        )}
-      </div>
-    )}
+      )
+    }
   </div>
 </li>
 
