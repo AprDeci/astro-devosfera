@@ -11,6 +11,7 @@ export const SITE = {
   scheduledPostMargin: 15 * 60 * 1000, // 15 minutes
   showArchives: true,
   showGalleries: true,
+  showGalleriesInRecentPosts: true,
   showBackButton: true, // show back button in post detail
   editPost: {
     enabled: false,

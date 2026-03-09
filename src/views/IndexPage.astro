@@ -22,8 +22,12 @@ const sortedPosts = getSortedPosts(posts);
 const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
 const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
 
-const rawGalleries = await getCollection("galleries", ({ data }) => !data.draft);
-const galleries = getSortedGalleries(rawGalleries);
+const rawGalleries = SITE.showGalleriesInRecentPosts
+  ? await getCollection("galleries", ({ data }) => !data.draft)
+  : [];
+const galleries = SITE.showGalleriesInRecentPosts
+  ? getSortedGalleries(rawGalleries)
+  : [];
 type FeedItem = 
   | { type: "post"; data: typeof recentPosts[number] }
   | { type: "gallery"; data: SortedGallery };
