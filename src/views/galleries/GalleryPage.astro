@@ -8,13 +8,13 @@ import Breadcrumb from "@/components/Breadcrumb.astro";
 import Datetime from "@/components/Datetime.astro";
 import { SITE } from "@/config";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { slugifyStr } from "@/utils/slugify";
 
 const { entry } = Astro.props;
 const { gallery: slug } = Astro.params;
 const { title, description, pubDatetime, coverImage, tags } = entry.data;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
 
 // Cargar todas las imágenes de la galería en build-time con un glob estático
 const allImages = import.meta.glob<{ default: ImageMetadata }>(
@@ -52,7 +52,9 @@ const hasCoverInFolder = coverImage
   : false;
 ---
 
-<Layout title={`${title} | ${t("galleryDetail.parentTitle")} | ${SITE.title}`} description={description}>
+<Layout
+  title={`${title} | ${t("galleryDetail.parentTitle")} | ${SITE.title}`}
+  description={description}>
   <Header />
   <Breadcrumb />
   <main id="main-content" class="app-layout pb-16">
@@ -61,7 +63,11 @@ const hasCoverInFolder = coverImage
       <div class="mb-1">
         <Datetime pubDatetime={pubDatetime} class="text-sm" />
       </div>
-      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
+      <h1
+        class="gallery-title text-3xl font-bold tracking-tight sm:text-4xl"
+        transition:name={slugifyStr(title.replaceAll(".", "-"))}>
+        {title}
+      </h1>
       {
         description && (
           <p class="mt-3 max-w-2xl text-foreground/70">{description}</p>
@@ -78,7 +84,11 @@ const hasCoverInFolder = coverImage
       }
       <p class="mt-4 text-sm text-foreground/50">
         {images.length}
-        {" "}{images.length === 1 ? t("galleryDetail.image") : t("galleryDetail.images")}
+        {" "}{
+          images.length === 1
+            ? t("galleryDetail.image")
+            : t("galleryDetail.images")
+        }
       </p>
     </header>
 
@@ -105,16 +115,14 @@ const hasCoverInFolder = coverImage
           class="gallery-grid mt-6"
           id="gallery-grid"
           role="list"
-          aria-label={t("galleryDetail.gridLabel", { title })}
-        >
+          aria-label={t("galleryDetail.gridLabel", { title })}>
           {images.map((img, idx) => (
             <li>
               <button
                 class="gallery-item group"
                 data-index={idx}
                 aria-label={t("galleryDetail.openImage", { alt: img.alt })}
-                type="button"
-              >
+                type="button">
                 <Image
                   src={img.src}
                   alt={img.alt}
@@ -145,14 +153,12 @@ const hasCoverInFolder = coverImage
   id="lightbox"
   class="lightbox"
   aria-label={t("galleryDetail.lightbox")}
-  aria-modal="true"
->
+  aria-modal="true">
   <button
     class="lightbox-close"
     id="lightbox-close"
     aria-label={t("galleryDetail.close")}
-    type="button"
-  >
+    type="button">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="20"
@@ -162,8 +168,7 @@ const hasCoverInFolder = coverImage
       stroke="currentColor"
       stroke-width="2"
       stroke-linecap="round"
-      stroke-linejoin="round"
-    >
+      stroke-linejoin="round">
       <line x1="18" y1="6" x2="6" y2="18"></line>
       <line x1="6" y1="6" x2="18" y2="18"></line>
     </svg>
@@ -172,8 +177,7 @@ const hasCoverInFolder = coverImage
     class="lightbox-nav lightbox-prev"
     id="lightbox-prev"
     aria-label={t("galleryDetail.prev")}
-    type="button"
-  >
+    type="button">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -183,8 +187,7 @@ const hasCoverInFolder = coverImage
       stroke="currentColor"
       stroke-width="2"
       stroke-linecap="round"
-      stroke-linejoin="round"
-    >
+      stroke-linejoin="round">
       <polyline points="15 18 9 12 15 6"></polyline>
     </svg>
   </button>
@@ -197,8 +200,7 @@ const hasCoverInFolder = coverImage
     class="lightbox-nav lightbox-next"
     id="lightbox-next"
     aria-label={t("galleryDetail.next")}
-    type="button"
-  >
+    type="button">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -208,8 +210,7 @@ const hasCoverInFolder = coverImage
       stroke="currentColor"
       stroke-width="2"
       stroke-linecap="round"
-      stroke-linejoin="round"
-    >
+      stroke-linejoin="round">
       <polyline points="9 18 15 12 9 6"></polyline>
     </svg>
   </button>

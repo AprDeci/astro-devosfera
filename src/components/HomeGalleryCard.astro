@@ -4,6 +4,7 @@ import type { ImageMetadata } from "astro";
 import { Image } from "astro:assets";
 import Datetime from "./Datetime.astro";
 import { getLangFromUrl, toLocalizedPath, useTranslations } from "@/i18n/utils";
+import { slugifyStr } from "@/utils/slugify";
 
 type Props = {
   gallery: CollectionEntry<"galleries">;
@@ -66,11 +67,11 @@ const THUMBNAIL_COUNT = 3;
             </span>
           </div>
           <h3
-            class="text-lg font-semibold text-foreground transition-colors duration-200 group-hover/card:text-accent">
+            transition:name={slugifyStr(title.replaceAll(".", "-"))}
+            class="gallery-title text-lg font-semibold text-foreground transition-colors duration-200 group-hover/card:text-accent">
             {title}
-            <span
-              class="absolute -inset-4 z-10 sm:-inset-5"
-              aria-hidden="true"></span>
+            <span class="absolute -inset-4 z-10 sm:-inset-5" aria-hidden="true"
+            ></span>
           </h3>
           <Datetime
             pubDatetime={pubDatetime}
