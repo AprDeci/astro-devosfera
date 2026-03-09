@@ -29,6 +29,6 @@ export const SITE = {
   },
   comment: {
     enabled: true,
-    envId: "https://twikoo.aprdec.top",
+    envId: "",
   },
 } as const;
