@@ -27,7 +27,7 @@ openwrt 可以使用如下命令一键安装 sing-box(不是 alpha 版本)
 
 如果 iptables-nft 安装失败没有影响(至少 tun 模式没有)
 
-```
+```sh
 opkg install kmod-inet-diag kmod-netlink-diag kmod-tun iptables-nft
 opkg install sing-box
 ```
@@ -44,7 +44,7 @@ sing-box 最重要的就是配置了, 小白可能一看到密密麻麻的配置
 
 使用 opkg 安装后在 etc/sing-box/ 文件夹下创建 **config.json**
 
-```
+```json
 {
     "log": {
         "disabled": false,
