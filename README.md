@@ -6,7 +6,8 @@
 - 调整部分CSS
 - twikoo评论适配(可选)
 - 最近发布添加画廊卡片(可选)
-- 友链页面
+- 友链页面(可选)
+- 画廊瀑布流布局(可选)
 
 Heavily customized version of the [AstroPaper](https://github.com/satnaing/astro-paper) theme with a **Terminal/Cyberpunk** aesthetic, image galleries, global search modal, and dozens of visual and interactive improvements.
 
