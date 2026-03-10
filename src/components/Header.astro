@@ -24,6 +24,7 @@ const localizedAbout = toLocalizedPath(lang, "/about");
 const localizedSearch = toLocalizedPath(lang, "/search");
 const localizedArchives = toLocalizedPath(lang, "/archives");
 const localizedGalleries = toLocalizedPath(lang, "/galleries");
+const localizedLinks = toLocalizedPath(lang, "/links");
 
 const isActive = (path: string) => {
   const currentPathArray = currentPath.split("/").filter(p => p.trim());
@@ -105,6 +106,19 @@ const isActive = (path: string) => {
               ]}>{t("nav.about")}</a
             >
           </li>
+          {
+            SITE.showLinks && (
+              <li>
+                <a
+                  href={localizedLinks}
+                  class:list={[
+                    "nav-link",
+                    { "nav-active": isActive(localizedLinks) },
+                  ]}>{t("nav.links")}</a
+                >
+              </li>
+            )
+          }
           <li class="flex items-center">
             <a
               href={localizedSearch}
@@ -228,6 +242,20 @@ const isActive = (path: string) => {
               <span>{t("nav.about")}</span>
             </a>
             {
+              SITE.showLinks && (
+                <a
+                  href={localizedLinks}
+                  class:list={[
+                    "mobile-nav-link",
+                    { active: isActive(localizedLinks) },
+                  ]}
+                  style="--i:3">
+                  <span class="mobile-nav-indicator" />
+                  <span>{t("nav.links")}</span>
+                </a>
+              )
+            }
+            {
               SITE.showArchives && (
                 <a
                   href={localizedArchives}
@@ -235,7 +263,7 @@ const isActive = (path: string) => {
                     "mobile-nav-link",
                     { active: isActive(localizedArchives) },
                   ]}
-                  style="--i:3">
+                  style="--i:4">
                   <span class="mobile-nav-indicator" />
                   <span>{t("nav.archives")}</span>
                 </a>
@@ -249,7 +277,7 @@ const isActive = (path: string) => {
                     "mobile-nav-link",
                     { active: isActive(localizedGalleries) },
                   ]}
-                  style="--i:4">
+                  style="--i:5">
                   <span class="mobile-nav-indicator" />
                   <span>{t("nav.galleries")}</span>
                 </a>
