@@ -88,14 +88,15 @@ const THUMBNAIL_COUNT = 3;
           <div class="flex items-center gap-2 overflow-hidden md:flex-shrink-0 md:self-start">
             <div class="flex -space-x-3">
               {thumbnails.slice(0, THUMBNAIL_COUNT).map((thumb, i) => (
-                <div class="relative aspect-square w-16 overflow-hidden rounded-lg border-2 border-background shadow-sm">
-                  <Image
-                    src={thumb}
+                <div class="relative size-16 overflow-hidden rounded-lg border-2 border-background shadow-sm">
+                  <img
+                    src={thumb.src}
                     alt=""
-                    class="h-full w-full object-cover transition-transform duration-300 group-hover/card:scale-105"
+                    width="64"
+                    height="64"
+                    class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover/card:scale-105"
                     loading="lazy"
-                    widths={[120]}
-                    sizes="64px"
+                    decoding="async"
                   />
                 </div>
               ))}
