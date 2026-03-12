@@ -1,7 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import type { ImageMetadata } from "astro";
-import { Image } from "astro:assets";
 import Datetime from "./Datetime.astro";
 import { getLangFromUrl, toLocalizedPath, useTranslations } from "@/i18n/utils";
 import { slugifyStr } from "@/utils/slugify";
@@ -14,7 +13,7 @@ type Props = {
   imageCount?: number;
 };
 
-const { gallery, slug, fallbackImage, thumbnails, imageCount } = Astro.props;
+const { gallery, slug, thumbnails, imageCount } = Astro.props;
 const { title, description, pubDatetime } = gallery.data;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -87,7 +86,7 @@ const THUMBNAIL_COUNT = 3;
         thumbnails && thumbnails.length > 0 && (
           <div class="flex items-center gap-2 overflow-hidden md:flex-shrink-0 md:self-start">
             <div class="flex -space-x-3">
-              {thumbnails.slice(0, THUMBNAIL_COUNT).map((thumb, i) => (
+              {thumbnails.slice(0, THUMBNAIL_COUNT).map(thumb => (
                 <div class="relative size-16 overflow-hidden rounded-lg border-2 border-background shadow-sm">
                   <img
                     src={thumb.src}

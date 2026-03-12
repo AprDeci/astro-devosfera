@@ -12,7 +12,7 @@ const twikooEnvId = SITE.comment.envId;
 
 {
   isCommentEnabled && (
-    <script define:vars={{ twikooEnvId }}>
+    <script define:vars={{ twikooEnvId }} is:inline>
       document.addEventListener("astro:page-load", () => {
         function loadTwikoo() {
           const commentsContainer = document.getElementById("tcomment");
